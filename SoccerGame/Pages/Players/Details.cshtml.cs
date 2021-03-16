@@ -28,7 +28,7 @@ namespace SoccerGame.Pages.Players
                 return NotFound();
             }
 
-            Player = await _context.Player.FirstOrDefaultAsync(m => m.ID == id);
+            Player = await _context.Players.FirstOrDefaultAsync(m => m.ID == id);
 
             if (Player == null)
             {

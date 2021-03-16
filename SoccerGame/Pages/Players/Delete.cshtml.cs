@@ -29,7 +29,7 @@ namespace SoccerGame.Pages.Players
                 return NotFound();
             }
 
-            Player = await _context.Player.FirstOrDefaultAsync(m => m.ID == id);
+            Player = await _context.Players.FirstOrDefaultAsync(m => m.ID == id);
 
             if (Player == null)
             {
@@ -45,11 +45,11 @@ namespace SoccerGame.Pages.Players
                 return NotFound();
             }
 
-            Player = await _context.Player.FindAsync(id);
+            Player = await _context.Players.FindAsync(id);
 
             if (Player != null)
             {
-                _context.Player.Remove(Player);
+                _context.Players.Remove(Player);
                 await _context.SaveChangesAsync();
             }
 

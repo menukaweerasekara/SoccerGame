@@ -30,7 +30,7 @@ namespace SoccerGame.Pages.Players
                 return NotFound();
             }
 
-            Player = await _context.Player.FirstOrDefaultAsync(m => m.ID == id);
+            Player = await _context.Players.FirstOrDefaultAsync(m => m.ID == id);
 
             if (Player == null)
             {
@@ -71,7 +71,7 @@ namespace SoccerGame.Pages.Players
 
         private bool PlayerExists(int id)
         {
-            return _context.Player.Any(e => e.ID == id);
+            return _context.Players.Any(e => e.ID == id);
         }
     }
 }

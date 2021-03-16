@@ -10,10 +10,9 @@ namespace SoccerGame.Data
         {
         }
 
-        public DbSet<Player> players { get; set; }
+        public DbSet<Player> Players { get; set; }
         public DbSet<Enrollment> Enrollments { get; set; }
         public DbSet<Coach> Coaches { get; set; }
-        public object Player { get; internal set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

@@ -7,8 +7,8 @@ namespace SoccerGame.Models
     {
         [DatabaseGenerated(DatabaseGeneratedOption.None)]
         public int CoachID { get; set; }
-        public string Title { get; set; }
-        public int Credits { get; set; }
+        public string FirstMidName { get; set; }
+        public string LastName { get; set; }
 
         public ICollection<Enrollment> Enrollments { get; set; }
     }

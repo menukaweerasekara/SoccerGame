@@ -12,12 +12,12 @@ namespace SoccerGame.Data
             context.Database.EnsureCreated();
 
             // Look for any students.
-            if (context.players.Any())
+            if (context.Players.Any())
             {
                 return;   // DB has been seeded
             }
 
-            var students = new Player[]
+            var players = new Player[]
             {
                 new Player{FirstMidName="Carson",LastName="Alexander",EnrollmentDate=DateTime.Parse("2019-09-01")},
                 new Player{FirstMidName="Meredith",LastName="Alonso",EnrollmentDate=DateTime.Parse("2017-09-01")},
@@ -29,37 +29,37 @@ namespace SoccerGame.Data
                 new Player{FirstMidName="Nino",LastName="Olivetto",EnrollmentDate=DateTime.Parse("2019-09-01")}
             };
 
-            context.players.AddRange(students);
+            context.Players.AddRange(players);
             context.SaveChanges();
 
-            var courses = new Coach[]
+            var coaches = new Coach[]
             {
-                new Course{CourseID=1050,Title="Chemistry",Credits=3},
-                new Course{CourseID=4022,Title="Microeconomics",Credits=3},
-                new Course{CourseID=4041,Title="Macroeconomics",Credits=3},
-                new Course{CourseID=1045,Title="Calculus",Credits=4},
-                new Course{CourseID=3141,Title="Trigonometry",Credits=4},
-                new Course{CourseID=2021,Title="Composition",Credits=3},
-                new Course{CourseID=2042,Title="Literature",Credits=4}
+                new Coach{CoachID=1050,FirstMidName="Carson",LastName="Xander"},
+                new Coach{CoachID=4022,FirstMidName="John",LastName="brown"},
+                new Coach{CoachID=4041,FirstMidName="Barry",LastName="Avenger"},
+                new Coach{CoachID=1045,FirstMidName="Geoge",LastName="Roger"},
+                new Coach{CoachID=3141,FirstMidName="Mark",LastName="Stark"},
+                new Coach{CoachID=2021,FirstMidName="Kevin",LastName="John"},
+                new Coach{CoachID=2042,FirstMidName="Steven",LastName="Bob"}
             };
 
-            context.Courses.AddRange(courses);
+            context.Coaches.AddRange(coaches);
             context.SaveChanges();
 
             var enrollments = new Enrollment[]
             {
-                new Enrollment{StudentID=1,CourseID=1050,Grade=Grade.A},
-                new Enrollment{StudentID=1,CourseID=4022,Grade=Grade.C},
-                new Enrollment{StudentID=1,CourseID=4041,Grade=Grade.B},
-                new Enrollment{StudentID=2,CourseID=1045,Grade=Grade.B},
-                new Enrollment{StudentID=2,CourseID=3141,Grade=Grade.F},
-                new Enrollment{StudentID=2,CourseID=2021,Grade=Grade.F},
-                new Enrollment{StudentID=3,CourseID=1050},
-                new Enrollment{StudentID=4,CourseID=1050},
-                new Enrollment{StudentID=4,CourseID=4022,Grade=Grade.F},
-                new Enrollment{StudentID=5,CourseID=4041,Grade=Grade.C},
-                new Enrollment{StudentID=6,CourseID=1045},
-                new Enrollment{StudentID=7,CourseID=3141,Grade=Grade.A},
+                new Enrollment{PlayerID=1,CoachID=1050},
+                new Enrollment{PlayerID=1,CoachID=4022},
+                new Enrollment{PlayerID=1,CoachID=4041},
+                new Enrollment{PlayerID=2,CoachID=1045},
+                new Enrollment{PlayerID=2,CoachID=3141},
+                new Enrollment{PlayerID=2,CoachID=2021},
+                new Enrollment{PlayerID=3,CoachID=1050},
+                new Enrollment{PlayerID=4,CoachID=1050},
+                new Enrollment{PlayerID=4,CoachID=4022},
+                new Enrollment{PlayerID=5,CoachID=4041},
+                new Enrollment{PlayerID=6,CoachID=1045},
+                new Enrollment{PlayerID=7,CoachID=3141},
             };
 
             context.Enrollments.AddRange(enrollments);
