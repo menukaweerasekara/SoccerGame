@@ -9,10 +9,10 @@ namespace SoccerGame.Data
     {
         public static void Initialize(GameContext context)
         {
-             //context.Database.EnsureCreated();
-            DbInitializer.Initialize(context);
+             context.Database.EnsureCreated();
+          // DbInitializer.Initialize(context);
 
-            // Look for any students.
+            // Look for any Players.
             if (context.Players.Any())
             {
                 return;   // DB has been seeded
