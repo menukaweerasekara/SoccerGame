@@ -16,9 +16,9 @@ namespace SoccerGame.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Coach>().ToTable("Course");
+            modelBuilder.Entity<Coach>().ToTable("Coach");
             modelBuilder.Entity<Enrollment>().ToTable("Enrollment");
-            modelBuilder.Entity<Player>().ToTable("Student");
+            modelBuilder.Entity<Player>().ToTable("Player");
         }
     }
 }

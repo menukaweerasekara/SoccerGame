@@ -30,7 +30,7 @@ namespace SoccerGame.Pages.Players
                 return NotFound();
             }
 
-            Player = await _context.Players.FirstOrDefaultAsync(m => m.ID == id);
+            Player = await _context.Players.FindAsync(id);
 
             if (Player == null)
             {
@@ -39,39 +39,25 @@ namespace SoccerGame.Pages.Players
             return Page();
         }
 
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for
-        // more details, see https://aka.ms/RazorPagesCRUD.
-        public async Task<IActionResult> OnPostAsync()
+        public async Task<IActionResult> OnPostAsync(int id)
         {
-            if (!ModelState.IsValid)
+            var playerToUpdate = await _context.Players.FindAsync(id);
+
+            if (playerToUpdate == null)
             {
-                return Page();
+                return NotFound();
             }
 
-            _context.Attach(Player).State = EntityState.Modified;
-
-            try
+            if (await TryUpdateModelAsync<Player>(
+                playerToUpdate,
+                "player",
+                s => s.FirstMidName, s => s.LastName, s => s.EnrollmentDate))
             {
                 await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!PlayerExists(Player.ID))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
+                return RedirectToPage("./Index");
             }
 
-            return RedirectToPage("./Index");
-        }
-
-        private bool PlayerExists(int id)
-        {
-            return _context.Players.Any(e => e.ID == id);
+            return Page();
         }
     }
 }

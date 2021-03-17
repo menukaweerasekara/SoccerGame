@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using SoccerGame.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
-using SoccerGame.Data;
-using SoccerGame.Models;
+using System.Threading.Tasks;
 
 namespace SoccerGame.Pages.Players
 {
@@ -21,20 +17,29 @@ namespace SoccerGame.Pages.Players
 
         [BindProperty]
         public Player Player { get; set; }
+        public string ErrorMessage { get; set; }
 
-        public async Task<IActionResult> OnGetAsync(int? id)
+        public async Task<IActionResult> OnGetAsync(int? id, bool? saveChangesError = false)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            Player = await _context.Players.FirstOrDefaultAsync(m => m.ID == id);
+            Player = await _context.Players
+                .AsNoTracking()
+                .FirstOrDefaultAsync(m => m.ID == id);
 
             if (Player == null)
             {
                 return NotFound();
             }
+
+            if (saveChangesError.GetValueOrDefault())
+            {
+                ErrorMessage = "Delete failed. Try again";
+            }
+
             return Page();
         }
 
@@ -45,15 +50,25 @@ namespace SoccerGame.Pages.Players
                 return NotFound();
             }
 
-            Player = await _context.Players.FindAsync(id);
+            var Player = await _context.Players.FindAsync(id);
 
-            if (Player != null)
+            if (Player == null)
+            {
+                return NotFound();
+            }
+
+            try
             {
                 _context.Players.Remove(Player);
                 await _context.SaveChangesAsync();
+                return RedirectToPage("./Index");
             }
-
-            return RedirectToPage("./Index");
+            catch (DbUpdateException /* ex */)
+            {
+                //Log the error (uncomment ex variable name and write a log.)
+                return RedirectToAction("./Delete",
+                                     new { id, saveChangesError = true });
+            }
         }
     }
 }

@@ -9,7 +9,8 @@ namespace SoccerGame.Data
     {
         public static void Initialize(GameContext context)
         {
-            context.Database.EnsureCreated();
+             //context.Database.EnsureCreated();
+            DbInitializer.Initialize(context);
 
             // Look for any students.
             if (context.Players.Any())

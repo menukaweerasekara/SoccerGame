@@ -19,11 +19,41 @@ namespace SoccerGame.Pages.Players
             _context = context;
         }
 
-        public IList<Player> Player { get;set; }
 
-        public async Task OnGetAsync()
+
+        public string NameSort { get; set; }
+        public string DateSort { get; set; }
+        public string CurrentFilter { get; set; }
+        public string CurrentSort { get; set; }
+
+        public IList<Player> Player { get; set; }
+
+        public async Task OnGetAsync(string sortOrder)
         {
-            Player = await _context.Players.ToListAsync();
+            // using System;
+            NameSort = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
+            DateSort = sortOrder == "Date" ? "date_desc" : "Date";
+
+            IQueryable<Player> playersIQ = from s in _context.Players
+                                           select s;
+
+            switch (sortOrder)
+            {
+                case "name_desc":
+                    playersIQ = playersIQ.OrderByDescending(s => s.LastName);
+                    break;
+                case "Date":
+                    playersIQ = playersIQ.OrderBy(s => s.EnrollmentDate);
+                    break;
+                case "date_desc":
+                    playersIQ = playersIQ.OrderByDescending(s => s.EnrollmentDate);
+                    break;
+                default:
+                    playersIQ = playersIQ.OrderBy(s => s.LastName);
+                    break;
+            }
+
+            Player = await playersIQ.AsNoTracking().ToListAsync();
         }
     }
 }
