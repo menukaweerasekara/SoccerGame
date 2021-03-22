@@ -29,6 +29,9 @@ namespace SoccerGame
 
             services.AddDbContext<GameContext>(options =>
                     options.UseSqlServer(Configuration.GetConnectionString("GameContext")));
+
+            services.AddDbContext<CoachContext>(options =>
+                    options.UseSqlServer(Configuration.GetConnectionString("CoachContext")));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
