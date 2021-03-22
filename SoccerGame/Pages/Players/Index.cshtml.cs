@@ -26,16 +26,34 @@ namespace SoccerGame.Pages.Players
         public string CurrentFilter { get; set; }
         public string CurrentSort { get; set; }
 
-        public IList<Player> Player { get; set; }
 
-        public async Task OnGetAsync(string sortOrder)
+        public PaginatedList<Player> Players { get; set; }
+
+        public async Task OnGetAsync(string sortOrder,
+            string currentFilter, string searchString, int? pageIndex)
         {
-            // using System;
+            CurrentSort = sortOrder;
+
             NameSort = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
             DateSort = sortOrder == "Date" ? "date_desc" : "Date";
+            if (searchString != null)
+            {
+                pageIndex = 1;
+            }
+            else
+            {
+                searchString = currentFilter;
+            }
+
+            CurrentFilter = searchString;
 
             IQueryable<Player> playersIQ = from s in _context.Players
-                                           select s;
+                                             select s;
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                playersIQ = playersIQ.Where(s => s.LastName.Contains(searchString)
+                                       || s.FirstMidName.Contains(searchString));
+            }
 
             switch (sortOrder)
             {
@@ -53,7 +71,9 @@ namespace SoccerGame.Pages.Players
                     break;
             }
 
-            Player = await playersIQ.AsNoTracking().ToListAsync();
+            int pageSize = 3;
+            Players = await PaginatedList<Player>.CreateAsync(
+                playersIQ.AsNoTracking(), pageIndex ?? 1, pageSize);
         }
     }
 }
