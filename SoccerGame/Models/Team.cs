@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace ContosoUniversity.Models
+namespace SoccerGame.Models
 {
-    public class Instructor
+    public class Team
     {
         public int ID { get; set; }
 
@@ -18,7 +18,7 @@ namespace ContosoUniversity.Models
         [Column("FirstName")]
         [Display(Name = "First Name")]
         [StringLength(50)]
-        public string FirstMidName { get; set; }
+        public string Name { get; set; }
 
         [DataType(DataType.Date)]
         [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
@@ -28,10 +28,10 @@ namespace ContosoUniversity.Models
         [Display(Name = "Full Name")]
         public string FullName
         {
-            get { return LastName + ", " + FirstMidName; }
+            get { return LastName + ", " + Name; }
         }
 
-        public ICollection<CourseAssignment> CourseAssignments { get; set; }
-        public OfficeAssignment OfficeAssignment { get; set; }
+        public ICollection<GameAssignment> GameAssignments { get; set; }
+        public SoccerAssignment SoccerAssignment { get; set; }
     }
 }

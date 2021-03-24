@@ -30,7 +30,7 @@ namespace SoccerGame
             services.AddDbContext<GameContext>(options =>
                     options.UseSqlServer(Configuration.GetConnectionString("GameContext")));
 
-            services.AddDbContext<CoachContext>(options =>
+            services.AddDbContext<GameContext>(options =>
                     options.UseSqlServer(Configuration.GetConnectionString("CoachContext")));
         }
 
