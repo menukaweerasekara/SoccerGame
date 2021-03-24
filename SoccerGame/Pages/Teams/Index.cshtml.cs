@@ -1,0 +1,56 @@
+﻿using SoccerGame.Models;
+using SoccerGame.Models.GamelViewModels;  // Add VM
+using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.EntityFrameworkCore;
+using System.Linq;
+using System.Threading.Tasks;
+
+namespace SoccerGame.Pages.Teams
+{
+    public class IndexModel : PageModel
+    {
+        private readonly SoccerGame.Data.GameContext _context;
+
+        public IndexModel(SoccerGame.Data.GameContext context)
+        {
+            _context = context;
+        }
+
+        public TeamIndexData TeamData { get; set; }
+        public int TeamID { get; set; }
+        public int CoachID { get; set; }
+
+        public async Task OnGetAsync(int? id, int? coachID)
+        {
+            TeamData = new TeamIndexData();
+            TeamData.Teams = await _context.Teams
+                .Include(i => i.SoccerAssignment)
+                .Include(i => i.GameAssignments)
+                    .ThenInclude(i => i.Coach)
+                        
+                .Include(i => i.GameAssignments)
+                    .ThenInclude(i => i.Coach)
+                        .ThenInclude(i => i.Enrollments)
+                            .ThenInclude(i => i.Player)
+                .AsNoTracking()
+                .OrderBy(i => i.LastName)
+                .ToListAsync();
+
+            if (id != null)
+            {
+                TeamID = id.Value;
+               Team = TeamData.Teams
+                    .Where(i => i.ID == id.Value).Single();
+                TeamData.Coaches = Teams.SoccerAssignment.Select(s => s.Course);
+            }
+
+            if (coachID != null)
+            {
+                CoachID = coachID.Value;
+                var selectedCourse = TeamData.Coaches
+                    .Where(x => x.CoachID == coachID).Single();
+                TeamData.Enrollments = selectedCo.Enrollments;
+            }
+        }
+    }
+}
