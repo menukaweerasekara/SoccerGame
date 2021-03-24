@@ -10,8 +10,8 @@ using SoccerGame.Data;
 namespace SoccerGame.Migrations
 {
     [DbContext(typeof(GameContext))]
-    [Migration("20210324010904_ComplexDataModel")]
-    partial class ComplexDataModel
+    [Migration("20210324230747_ColumnFirstName")]
+    partial class ColumnFirstName
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
