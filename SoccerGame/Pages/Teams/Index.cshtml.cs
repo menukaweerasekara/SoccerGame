@@ -27,29 +27,34 @@ namespace SoccerGame.Pages.Teams
                 .Include(i => i.SoccerAssignment)
                 .Include(i => i.GameAssignments)
                     .ThenInclude(i => i.Coach)
-                        
-                .Include(i => i.GameAssignments)
-                    .ThenInclude(i => i.Coach)
-                        .ThenInclude(i => i.Enrollments)
-                            .ThenInclude(i => i.Player)
-                .AsNoTracking()
+                    .ThenInclude(i => i.DepartmentID)
+                //.Include(i => i.CourseAssignments)
+                //    .ThenInclude(i => i.Course)
+                //        .ThenInclude(i => i.Enrollments)
+                //            .ThenInclude(i => i.Student)
+                //.AsNoTracking()
                 .OrderBy(i => i.LastName)
                 .ToListAsync();
 
             if (id != null)
             {
                 TeamID = id.Value;
-               Team = TeamData.Teams
+                Team team = TeamData.Teams
                     .Where(i => i.ID == id.Value).Single();
-                TeamData.Coaches = Teams.SoccerAssignment.Select(s => s.Course);
+                TeamData.Coaches = team.GameAssignment.Select(s => s.Coach);
             }
 
             if (coachID != null)
             {
                 CoachID = coachID.Value;
-                var selectedCourse = TeamData.Coaches
-                    .Where(x => x.CoachID == coachID).Single();
-                TeamData.Enrollments = selectedCo.Enrollments;
+                var selectedCoach = TeamData.Coaches
+                    .Where(x => x.CoachID == CoachID).Single();
+                await _context.Entry(selectedCoach).Collection(x => x.Enrollments).LoadAsync();
+                foreach (Enrollment enrollment in selectedCoach.Enrollments)
+                {
+                    await _context.Entry(enrollment).Reference(x => x.Player).LoadAsync();
+                }
+                TeamData.Enrollments = selectedCoach.Enrollments;
             }
         }
     }

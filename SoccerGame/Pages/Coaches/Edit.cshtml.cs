@@ -1,17 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using SoccerGame.Models;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using SoccerGame.Data;
-using SoccerGame.Models;
+using System.Threading.Tasks;
 
 namespace SoccerGame.Pages.Coaches
 {
-    public class EditModel : PageModel
+    public class EditModel : DepartmentNamePageModel
     {
         private readonly SoccerGame.Data.GameContext _context;
 
@@ -30,48 +24,45 @@ namespace SoccerGame.Pages.Coaches
                 return NotFound();
             }
 
-            Coach = await _context.Coaches.FirstOrDefaultAsync(m => m.CoachID == id);
+            Coach = await _context.Coaches
+                .Include(c => c.DepartmentID).FirstOrDefaultAsync(m => m.CoachID == id);
 
             if (Coach == null)
             {
                 return NotFound();
             }
+
+            // Select current DepartmentID.
+            PopulateDepartmentsDropDownList(_context, Coach.DepartmentID);
             return Page();
         }
 
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for
-        // more details, see https://aka.ms/RazorPagesCRUD.
-        public async Task<IActionResult> OnPostAsync()
+        public async Task<IActionResult> OnPostAsync(int? id)
         {
-            if (!ModelState.IsValid)
+            if (id == null)
             {
-                return Page();
+                return NotFound();
             }
 
-            _context.Attach(Coach).State = EntityState.Modified;
+            var coachToUpdate = await _context.Coaches.FindAsync(id);
 
-            try
+            if (coachToUpdate == null)
+            {
+                return NotFound();
+            }
+
+            if (await TryUpdateModelAsync<Coach>(
+                 coachToUpdate,
+                 "coach",   // Prefix for form value.
+                   c => c.DepartmentID,  c => c.FirstMidName))
             {
                 await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!CoachExists(Coach.CoachID))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
+                return RedirectToPage("./Index");
             }
 
-            return RedirectToPage("./Index");
-        }
-
-        private bool CoachExists(int id)
-        {
-            return _context.Coaches.Any(e => e.CoachID == id);
+            // Select DepartmentID if TryUpdateModelAsync fails.
+            PopulateDepartmentsDropDownList(_context, coachToUpdate.DepartmentID);
+            return Page();
         }
     }
 }

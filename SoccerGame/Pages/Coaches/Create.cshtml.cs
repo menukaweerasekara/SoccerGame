@@ -1,16 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using SoccerGame.Models;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using SoccerGame.Data;
-using SoccerGame.Models;
+using System.Threading.Tasks;
 
 namespace SoccerGame.Pages.Coaches
 {
-    public class CreateModel : PageModel
+    public class CreateModel : DepartmentNamePageModel
     {
         private readonly SoccerGame.Data.GameContext _context;
 
@@ -21,25 +15,30 @@ namespace SoccerGame.Pages.Coaches
 
         public IActionResult OnGet()
         {
+            PopulateDepartmentsDropDownList(_context);
             return Page();
         }
 
         [BindProperty]
         public Coach Coach { get; set; }
 
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for
-        // more details, see https://aka.ms/RazorPagesCRUD.
         public async Task<IActionResult> OnPostAsync()
         {
-            if (!ModelState.IsValid)
+            var emptyCoach = new Coach();
+
+            if (await TryUpdateModelAsync<Coach>(
+                 emptyCoach,
+                 "coach",   // Prefix for form value.
+                 s => s.CoachID, s => s.DepartmentID, s => s.FirstMidName))
             {
-                return Page();
+                _context.Coaches.Add(emptyCoach);
+                await _context.SaveChangesAsync();
+                return RedirectToPage("./Index");
             }
 
-            _context.Coaches.Add(Coach);
-            await _context.SaveChangesAsync();
-
-            return RedirectToPage("./Index");
+            // Select DepartmentID if TryUpdateModelAsync fails.
+            PopulateDepartmentsDropDownList(_context, emptyCoach.DepartmentID);
+            return Page();
         }
     }
 }

@@ -16,7 +16,7 @@ namespace SoccerGame.Data
         public DbSet<Department> Departments { get; set; }
         public DbSet<Team> Teams { get; set; }
         public DbSet<SoccerAssignment> SoccerAssignments { get; set; }
-        public DbSet<GameAssignment> gameAssignments { get; set; }
+        public DbSet<GameAssignment> GameAssignments { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
