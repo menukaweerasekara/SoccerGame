@@ -12,5 +12,6 @@ namespace SoccerGame.Models
         public string Location { get; set; }
 
         public Team Team { get; set; }
+        public int CoachID { get; set; }
     }
 }
