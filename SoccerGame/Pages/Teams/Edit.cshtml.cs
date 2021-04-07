@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using SoccerGame.Data;
 using SoccerGame.Models;
 
-namespace SoccerGame.Pages.Team
+namespace SoccerGame.Pages.Teams
 {
     public class EditModel : PageModel
     {
