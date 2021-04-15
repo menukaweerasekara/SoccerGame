@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using SoccerGame.Data;
 using SoccerGame.Models;
 
-namespace SoccerGame.Pages.Team
+namespace SoccerGame.Pages.Teams
 {
     public class CreateModel : PageModel
     {

@@ -17,7 +17,7 @@ namespace SoccerGame.Pages.Teams
         {
             var allcoach = context.Coaches;
             var teamCoaches = new HashSet<int>(
-                team.SoccerAssignment.Select(c => c.CoachID));
+                team.GameAssignments.Select(c => c.CoachID));
             AssignedCoachDataList = new List<AssignedCoachData>();
             foreach (var coach in allcoach)
             {
@@ -35,21 +35,21 @@ namespace SoccerGame.Pages.Teams
         {
             if (selectedCoaches == null)
             {
-                teamToUpdate.SoccerAssignment = new List<SoccerAssignment>();
+                teamToUpdate.GameAssignments = new List<GameAssignment>();
                 return;
             }
 
             var selectedCoachesHS = new HashSet<string>(selectedCoaches);
             var teamCoaches = new HashSet<int>
-                (teamToUpdate.SoccerAssignment.Select(c => c.Coach.CoachID));
+                (teamToUpdate.GameAssignments.Select(c => c.Coach.CoachID));
             foreach (var coach in context.Coaches)
             {
                 if (selectedCoachesHS.Contains(coach.CoachID.ToString()))
                 {
                     if (!teamCoaches.Contains(coach.CoachID))
                     {
-                        teamToUpdate.SoccerAssignment.Add(
-                            new SoccerAssignment
+                        teamToUpdate.GameAssignments.Add(
+                            new GameAssignment
                             {
                                 TeamID = teamToUpdate.ID,
                                 CoachID = coach.CoachID
@@ -60,9 +60,9 @@ namespace SoccerGame.Pages.Teams
                 {
                     if (teamCoaches.Contains(coach.CoachID))
                     {
-                        SoccerAssignment coachtoremove
+                        GameAssignment coachtoremove
                             = teamToUpdate
-                                .SoccerAddignment
+                                .GameAssignments
                                 .SingleOrDefault(i => i.CoachID == coach.CoachID);
                         context.Remove(coachtoremove);
                     }
