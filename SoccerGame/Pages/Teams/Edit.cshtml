@@ -17,9 +17,9 @@
                 <span asp-validation-for="Team.LastName" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Team.FirstMidName" class="control-label"></label>
-                <input asp-for="Team.FirstMidName" class="form-control" />
-                <span asp-validation-for="Team.FirstMidName" class="text-danger"></span>
+                <label asp-for="Team.FullName" class="control-label"></label>
+                <input asp-for="Team.FullName" class="form-control" />
+                <span asp-validation-for="Team.FullName" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Team.HireDate" class="control-label"></label>
@@ -27,9 +27,9 @@
                 <span asp-validation-for="Team.HireDate" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Team.GameAssignment.Location" class="control-label"></label>
-                <input asp-for="Team.GameAssignment.Location" class="form-control" />
-                <span asp-validation-for="Team.GameAssignment.Location" class="text-danger" />
+                <label asp-for="Team.SoccerAssignment.Location" class="control-label"></label>
+                <input asp-for="Team.SoccerAssignment.Location" class="form-control" />
+                <span asp-validation-for="Team.SoccerAssignment.Location" class="text-danger" />
             </div>
             <div class="form-group">
                 <div class="table">
@@ -38,7 +38,7 @@
                             @{
                                 int cnt = 0;
 
-                                foreach (var coach in Model.AssignedCoachDataList)
+                                foreach (var course in Model.AssignedCoachDataList)
                                 {
                                     if (cnt++ % 3 == 0)
                                     {
@@ -46,10 +46,10 @@
                                     }
                                     @:<td>
                                         <input type="checkbox"
-                                               name="selectedCoaches"
-                                               value="@coach.CoachID"
-                                               @(Html.Raw(coach.Assigned ? "checked=\"checked\"" : "")) />
-                                        @coach.CoachID @:  @coach.Title
+                                               name="selechedcoach"
+                                               value="@course.CoachID"
+                                               @(Html.Raw(course.Assigned ? "checked=\"checked\"" : "")) />
+                                        @course.CoachID @:  @course.FirstMidName
                                     @:</td>
                                 }
                             @:</tr>

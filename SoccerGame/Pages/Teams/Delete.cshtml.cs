@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using SoccerGame.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
-using SoccerGame.Data;
-using SoccerGame.Models;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace SoccerGame.Pages.Teams
 {
@@ -45,14 +42,23 @@ namespace SoccerGame.Pages.Teams
                 return NotFound();
             }
 
-            Team = await _context.Teams.FindAsync(id);
+            Team team = await _context.Teams
+                .Include(i => i.GameAssignments)
+                .SingleAsync(i => i.ID == id);
 
-            if (Team != null)
+            if (team == null)
             {
-                _context.Teams.Remove(Team);
-                await _context.SaveChangesAsync();
+                return RedirectToPage("./Index");
             }
 
+            var departments = await _context.Departments
+                .Where(d => d.TeamID == id)
+                .ToListAsync();
+            departments.ForEach(d => d.TeamID = null);
+
+            _context.Teams.Remove(team);
+
+            await _context.SaveChangesAsync();
             return RedirectToPage("./Index");
         }
     }

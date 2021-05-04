@@ -27,12 +27,12 @@ namespace SoccerGame.Pages.Teams
                 .Include(i => i.SoccerAssignment)
                 .Include(i => i.GameAssignments)
                     .ThenInclude(i => i.Coach)
-                    .ThenInclude(i => i.DepartmentID)
-                //.Include(i => i.CourseAssignments)
-                //    .ThenInclude(i => i.Course)
-                //        .ThenInclude(i => i.Enrollments)
-                //            .ThenInclude(i => i.Student)
-                //.AsNoTracking()
+                        .ThenInclude(i => i.DepartmentID)
+                /*  .Include(i => i.GameAssignments)
+                      .ThenInclude(i => i.Coach)
+                          .ThenInclude(i => i.Enrollments)
+                              .ThenInclude(i => i.Player)
+                  .AsNoTracking()*/
                 .OrderBy(i => i.LastName)
                 .ToListAsync();
 
@@ -41,14 +41,14 @@ namespace SoccerGame.Pages.Teams
                 TeamID = id.Value;
                 Team team = TeamData.Teams
                     .Where(i => i.ID == id.Value).Single();
-                TeamData.Coaches = team.GameAssignment.Select(s => s.Coach);
+                TeamData.Coaches = team.GameAssignments.Select(s => s.Coach);
             }
 
             if (coachID != null)
             {
                 CoachID = coachID.Value;
                 var selectedCoach = TeamData.Coaches
-                    .Where(x => x.CoachID == CoachID).Single();
+                    .Where(x => x.CoachID == coachID).Single();
                 await _context.Entry(selectedCoach).Collection(x => x.Enrollments).LoadAsync();
                 foreach (Enrollment enrollment in selectedCoach.Enrollments)
                 {

@@ -1,17 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using SoccerGame.Models;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using SoccerGame.Data;
-using SoccerGame.Models;
+using System;
+using System.Threading.Tasks;
 
 namespace SoccerGame.Pages.Teams
+
 {
-    public class EditModel : PageModel
+    public class EditModel : TeamCoachesPageModel
     {
         private readonly SoccerGame.Data.GameContext _context;
 
@@ -30,48 +26,56 @@ namespace SoccerGame.Pages.Teams
                 return NotFound();
             }
 
-            Team = await _context.Teams.FirstOrDefaultAsync(m => m.ID == id);
+            Team = await _context.Teams
+                .Include(i => i.SoccerAssignment)
+                .Include(i => i.GameAssignments).ThenInclude(i => i.Coach)
+                .AsNoTracking()
+                .FirstOrDefaultAsync(m => m.ID == id);
 
             if (Team == null)
             {
                 return NotFound();
             }
+            PopulateAssignedCoachData(_context, Team);
             return Page();
         }
 
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for
-        // more details, see https://aka.ms/RazorPagesCRUD.
-        public async Task<IActionResult> OnPostAsync()
+        public async Task<IActionResult> OnPostAsync(int? id, string[] selectedCoach)
         {
-            if (!ModelState.IsValid)
+            if (id == null)
             {
-                return Page();
+                return NotFound();
             }
 
-            _context.Attach(Team).State = EntityState.Modified;
+            var teamToUpdate = await _context.Teams
+                .Include(i => i.SoccerAssignment)
+                .Include(i => i.GameAssignments)
+                    .ThenInclude(i => i.Coach)
+                .FirstOrDefaultAsync(s => s.ID == id);
 
-            try
+            if (teamToUpdate == null)
             {
+                return NotFound();
+            }
+
+            if (await TryUpdateModelAsync<Team>(
+                teamToUpdate,
+                "Team",
+                i => i.FullName, i => i.LastName,
+                i => i.HireDate, i => i.SoccerAssignment))
+            {
+                if (String.IsNullOrWhiteSpace(
+                    teamToUpdate.SoccerAssignment?.Location))
+                {
+                    teamToUpdate.SoccerAssignment = null;
+                }
+                UpdateTeamCoaches(_context, selectedCoach, teamToUpdate);
                 await _context.SaveChangesAsync();
+                return RedirectToPage("./Index");
             }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!TeamExists(Team.ID))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return RedirectToPage("./Index");
-        }
-
-        private bool TeamExists(int id)
-        {
-            return _context.Teams.Any(e => e.ID == id);
+            UpdateTeamCoaches(_context, selectedCoach, teamToUpdate);
+            PopulateAssignedCoachData(_context, teamToUpdate);
+            return Page();
         }
     }
 }
