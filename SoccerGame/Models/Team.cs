@@ -7,31 +7,20 @@ namespace SoccerGame.Models
 {
     public class Team
     {
-        public int ID { get; set; }
+        public int TeamID { get; set; }
 
-        [Required]
-        [Display(Name = "Last Name")]
-        [StringLength(50)]
-        public string LastName { get; set; }
+        public string TeamName { get; set; }
 
-        [Required]
-        [Column("FirstName")]
-        [Display(Name = "First Name")]
-        [StringLength(50)]
-        public string Name { get; set; }
 
-        [DataType(DataType.Date)]
-        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
-        [Display(Name = "Hire Date")]
-        public DateTime HireDate { get; set; }
+        public int DivisionID { get; set; }
 
-        [Display(Name = "Full Name")]
-        public string FullName
-        {
-            get { return LastName + ", " + Name; }
-        }
+        public Division Divisions { get; set; }
+       
+        public ICollection<Player> Players { get; set; }
 
-        public ICollection<GameAssignment> GameAssignments { get; set; }
-        public SoccerAssignment SoccerAssignment { get; set; }
+
+
+       
+        
     }
 }
