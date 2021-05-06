@@ -21,11 +21,32 @@ namespace SoccerGame.Data
             var players = new Player[]
             {
                 new Player{PlayerName = "Mike Davis", Age = 16, Position = "Defender", TeamID = 1},
-                new Player{PlayerName = "Mike Davis", Age = 16, Position = "Midfielder", TeamID = 1},
-                new Player{PlayerName = "Mike Davis", Age = 16, Position = "Goalkeeper", TeamID = 1},
-                new Player{PlayerName = "Mike Davis", Age = 16, Position = "Attacker", TeamID = 1},
-                new Player{PlayerName = "Mike Davis", Age = 16, Position = "Attacker", TeamID = 1},
-                new Player{PlayerName = "Mike Davis", Age = 16, Position = "Defender", TeamID = 1},
+                new Player{PlayerName = "Tasnim Jacobs", Age = 16, Position = "Midfielder", TeamID = 1},
+                new Player{PlayerName = "Nieve Lees", Age = 16, Position = "Goalkeeper", TeamID = 1},
+                new Player{PlayerName = "Iyla Marsden", Age = 16, Position = "Attacker", TeamID = 1},
+                new Player{PlayerName = "Atlas Gallegos", Age = 16, Position = "Attacker", TeamID = 1},
+                new Player{PlayerName = "Louise Busby", Age = 16, Position = "Defender", TeamID = 1},
+
+                 new Player{PlayerName = "Anisah Salazar", Age = 16, Position = "Defender", TeamID = 2},
+                new Player{PlayerName = "Laurel Dunkley", Age = 16, Position = "Midfielder", TeamID = 2},
+                new Player{PlayerName = "Rex Finch", Age = 16, Position = "Goalkeeper", TeamID = 2},
+                new Player{PlayerName = "Tamera Alvarez", Age = 16, Position = "Attacker", TeamID = 2},
+                new Player{PlayerName = "Leigh Milner", Age = 16, Position = "Attacker", TeamID = 2},
+                new Player{PlayerName = "Kavita Shea", Age = 16, Position = "Defender", TeamID = 2},
+
+                 new Player{PlayerName = "Fatimah Mosley", Age = 16, Position = "Defender", TeamID = 3},
+                new Player{PlayerName = "Claude Tang", Age = 16, Position = "Midfielder", TeamID = 3},
+                new Player{PlayerName = "Ottilie Mckeown", Age = 16, Position = "Goalkeeper", TeamID = 3},
+                new Player{PlayerName = "Maximilian Dowling", Age = 16, Position = "Attacker", TeamID = 3},
+                new Player{PlayerName = "Taslima Merritt", Age = 16, Position = "Attacker", TeamID = 3},
+                new Player{PlayerName = "Don Ryan", Age = 16, Position = "Defender", TeamID = 3},
+
+                 new Player{PlayerName = "Theresa Stevens", Age = 16, Position = "Defender", TeamID = 4},
+                new Player{PlayerName = "Mateo Reader", Age = 16, Position = "Midfielder", TeamID = 4},
+                new Player{PlayerName = "Johnny Waller", Age = 16, Position = "Goalkeeper", TeamID = 4},
+                new Player{PlayerName = "Rayan Hoover", Age = 16, Position = "Attacker", TeamID = 4},
+                new Player{PlayerName = "Norah Redman", Age = 16, Position = "Attacker", TeamID = 4},
+                new Player{PlayerName = "Rahul Enriquez", Age = 16, Position = "Defender", TeamID = 4},
 
 
             };
